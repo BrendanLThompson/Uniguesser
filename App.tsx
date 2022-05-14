@@ -1,30 +1,121 @@
+import React from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Modal,
+  TouchableOpacity,
+} from "react-native";
 
-export default function App() {
-  return (
-    <View style={styles.top}>
-      <Text style={styles.header}>
-        <Image
-          source={require("./assets/circle-question-solid.png")}
-          style={styles.image}
-        />{" "}
-        Uni-Guesser!{" "}
-        <Image
-          source={require("./assets/ranking-star-solid.png")}
-          style={styles.image2}
-        />
-      </Text>
-      <View style={styles.container}>
-        <View style={styles.SquareShapeView} />
-        <View style={styles.SquareShapeView} />
-        <View style={styles.SquareShapeView} />
-        <View style={styles.SquareShapeView} />
+class App extends React.Component {
+  constructor() {
+    super();
+    this.state = { show: false };
+  }
+
+  render() {
+    return (
+      <View style={styles.top}>
+        <Text style={styles.header}>
+          <TouchableOpacity
+            onPress={() => {
+              this.setState({ show: true });
+            }}
+          >
+            <Image
+              source={require("./assets/circle-question-solid.png")}
+              style={styles.image}
+            />
+          </TouchableOpacity>{" "}
+          <Modal1 transparent={true} visible={this.state.show}>
+            <View
+              style={{
+                backgroundColor: "#000000aa",
+                flex: 1,
+                alignItems: "center",
+              }}
+            >
+              <View
+                style={{
+                  marginTop: "5%",
+                  width: 600,
+                  height: 600,
+                  borderWidth: 3,
+                  borderColor: "#B2A268",
+                  backgroundColor: "#0054A6",
+                }}
+              >
+                <TouchableOpacity
+                  style={styles.Mimage}
+                  onPress={() => {
+                    this.setState({ show: false });
+                  }}
+                >
+                  <Image
+                    source={require("./assets/circle-question-solid.png")}
+                    style={styles.Mimage}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal1>
+          Uni-Guesser!{" "}
+          <TouchableOpacity
+            onPress={() => {
+              this.setState({ show: true });
+            }}
+          >
+            <Image
+              source={require("./assets/ranking-star-solid.png")}
+              style={styles.image}
+            />
+          </TouchableOpacity>{" "}
+          <Modal2 transparent={true} visible={this.state.show}>
+            <View
+              style={{
+                backgroundColor: "#000000aa",
+                flex: 1,
+                alignItems: "center",
+              }}
+            >
+              <View
+                style={{
+                  marginTop: "5%",
+                  width: 600,
+                  height: 600,
+                  borderWidth: 3,
+                  borderColor: "#B2A268",
+                  backgroundColor: "#0054A6",
+                }}
+              >
+                <TouchableOpacity
+                  style={styles.Mimage}
+                  onPress={() => {
+                    this.setState({ show: false });
+                  }}
+                >
+                  <Image
+                    source={require("./assets/ranking-star-solid.png")}
+                    style={styles.Mimage}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal2>
+        </Text>
+        <View style={styles.container}>
+          <View style={styles.SquareShapeView} />
+          <View style={styles.SquareShapeView} />
+          <View style={styles.SquareShapeView} />
+          <View style={styles.SquareShapeView} />
+        </View>
+        <View style={styles.RectangleShapeView} />
+        <StatusBar style="auto" />
       </View>
-      <View style={styles.RectangleShapeView} />
-      <StatusBar style="auto" />
-    </View>
-  );
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -57,7 +148,7 @@ const styles = StyleSheet.create({
     borderColor: "#FFF200",
   },
   RectangleShapeView: {
-    marginTop: "15%",
+    marginTop: "5%",
     width: 600,
     height: 60,
     backgroundColor: "#0054A6",
@@ -68,8 +159,12 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
   },
-  image2: {
+  Mimage: {
     width: 30,
     height: 30,
+    marginLeft: "2%",
+    marginTop: "2%",
   },
 });
+
+export default App;
