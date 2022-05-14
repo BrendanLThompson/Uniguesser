@@ -12,7 +12,7 @@ import {
 class App extends React.Component {
   constructor() {
     super();
-    this.state = { show: false };
+    this.state = { firstModal: false, secondModal: false };
   }
 
   render() {
@@ -21,7 +21,7 @@ class App extends React.Component {
         <Text style={styles.header}>
           <TouchableOpacity
             onPress={() => {
-              this.setState({ show: true });
+              this.setState({ firstModal: true });
             }}
           >
             <Image
@@ -29,7 +29,7 @@ class App extends React.Component {
               style={styles.image}
             />
           </TouchableOpacity>{" "}
-          <Modal1 transparent={true} visible={this.state.show}>
+          <Modal transparent={true} visible={this.state.firstModal}>
             <View
               style={{
                 backgroundColor: "#000000aa",
@@ -50,7 +50,7 @@ class App extends React.Component {
                 <TouchableOpacity
                   style={styles.Mimage}
                   onPress={() => {
-                    this.setState({ show: false });
+                    this.setState({ firstModal: false });
                   }}
                 >
                   <Image
@@ -60,11 +60,11 @@ class App extends React.Component {
                 </TouchableOpacity>
               </View>
             </View>
-          </Modal1>
+          </Modal>
           Uni-Guesser!{" "}
           <TouchableOpacity
             onPress={() => {
-              this.setState({ show: true });
+              this.setState({ secondModal: true });
             }}
           >
             <Image
@@ -72,7 +72,7 @@ class App extends React.Component {
               style={styles.image}
             />
           </TouchableOpacity>{" "}
-          <Modal2 transparent={true} visible={this.state.show}>
+          <Modal transparent={true} visible={this.state.secondModal}>
             <View
               style={{
                 backgroundColor: "#000000aa",
@@ -93,7 +93,7 @@ class App extends React.Component {
                 <TouchableOpacity
                   style={styles.Mimage}
                   onPress={() => {
-                    this.setState({ show: false });
+                    this.setState({ secondModal: false });
                   }}
                 >
                   <Image
@@ -103,7 +103,7 @@ class App extends React.Component {
                 </TouchableOpacity>
               </View>
             </View>
-          </Modal2>
+          </Modal>
         </Text>
         <View style={styles.container}>
           <View style={styles.SquareShapeView} />
