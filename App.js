@@ -11,6 +11,7 @@ import {
   FlatList,
 } from "react-native";
 import { SearchBar } from "react-native-elements";
+import GetUniversityImages from "./ImageSearchApiController.js"
 
 const Item = ({ uni }) => {
   return (
@@ -44,9 +45,13 @@ class App extends React.Component {
       firstModal: false,
       secondModal: false,
     };
+    const imageUri = GetUniversityImages("csun " + "field")
+    console.log("results: " + imageUri);
   }
 
-  render() {
+
+
+  render() {    
     return (
       <View style={styles.top}>
         <Text style={styles.header}>
@@ -145,10 +150,12 @@ class App extends React.Component {
         <StatusBar style="auto" />
         <View style={styles.container}>
           <View style={styles.SquareShapeView}>
+            
             <Image
               id="img"
               style={styles.Squareimg}
-              source={require("./assets/ye.png")}
+              
+              source={{uri: GetUniversityImages("csun " + "field")}}
             />
           </View>
           <View style={styles.SquareShapeView}>
