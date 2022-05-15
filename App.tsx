@@ -7,7 +7,19 @@ import {
   Image,
   Modal,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
+import { SearchBar } from "react-native-elements";
+
+const Item = ({ uni }) => {
+  return (
+    <View style={styles.card}>
+      <Text style={styles.uni}>{uni}</Text>
+    </View>
+  );
+};
+
+const renderItem = ({ item }) => <Item uni={item.uni} />;
 
 class App extends React.Component {
   constructor() {
@@ -61,7 +73,7 @@ class App extends React.Component {
               </View>
             </View>
           </Modal>
-          Uni-Guesser!{" "}
+          Uni-Guessr!{" "}
           <TouchableOpacity
             onPress={() => {
               this.setState({ secondModal: true });
@@ -71,7 +83,7 @@ class App extends React.Component {
               source={require("./assets/ranking-star-solid.png")}
               style={styles.image}
             />
-          </TouchableOpacity>{" "}
+          </TouchableOpacity>
           <Modal transparent={true} visible={this.state.secondModal}>
             <View
               style={{
@@ -111,7 +123,30 @@ class App extends React.Component {
           <View style={styles.SquareShapeView} />
           <View style={styles.SquareShapeView} />
         </View>
-        <View style={styles.RectangleShapeView} />
+
+        <View style={styles.searchList}>
+          <SearchBar
+            placeholder="Search Here..."
+            lightTheme
+            value={this.state.searchValue}
+            containerStyle={{
+              backgroundColor: "#0054A6",
+              borderWidth: 3,
+              borderBottomWidth: 3,
+              borderTopWidth: 3,
+              borderTopColor: "#FFF200",
+              borderBottomColor: "#FFF200",
+              borderColor: "#FFF200",
+            }}
+            onChangeText={(text) => this.searchFunction(text)}
+            autoCorrect={false}
+          />
+          <FlatList
+            data={this.state.data}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+          />
+        </View>
         <StatusBar style="auto" />
       </View>
     );
@@ -141,16 +176,8 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     marginTop: "10%",
-    marginRight: "4%",
+    marginRight: "3.75%",
     marginLeft: "-2%",
-    backgroundColor: "#0054A6",
-    borderWidth: 3,
-    borderColor: "#FFF200",
-  },
-  RectangleShapeView: {
-    marginTop: "5%",
-    width: 600,
-    height: 60,
     backgroundColor: "#0054A6",
     borderWidth: 3,
     borderColor: "#FFF200",
@@ -164,6 +191,25 @@ const styles = StyleSheet.create({
     height: 30,
     marginLeft: "2%",
     marginTop: "2%",
+  },
+  card: {
+    backgroundColor: "#0054A6",
+    borderWidth: 3,
+    borderColor: "#FFF200",
+    padding: 20,
+    borderRadius: 20,
+    marginVertical: 10,
+    marginHorizontal: 15,
+  },
+  uni: {
+    fontSize: 18,
+    marginBottom: 15,
+  },
+  searchList: {
+    marginTop: "5%",
+    width: 600,
+    height: 60,
+    marginRight: "-1%",
   },
 });
 
