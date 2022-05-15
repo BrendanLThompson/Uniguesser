@@ -118,8 +118,18 @@ class App extends React.Component {
           </Modal>
         </Text>
         <View style={styles.container}>
-          <View style={styles.SquareShapeView} />
-          <View style={styles.SquareShapeView} />
+          <View style={styles.SquareShapeView}>
+            <Image
+              style={styles.Squareimg}
+              source={require("./assets/ye.png")}
+            />
+          </View>
+          <View style={styles.SquareShapeView}>
+            <Image
+              style={styles.Squareimg}
+              source={require("./assets/yes.png")}
+            />
+          </View>
           <View style={styles.SquareShapeView} />
           <View style={styles.SquareShapeView} />
         </View>
@@ -181,6 +191,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#0054A6",
     borderWidth: 3,
     borderColor: "#FFF200",
+  },
+  Squareimg: {
+    width: 293,
+    height: 293,
+    resizeMode: "contain",
   },
   image: {
     width: 30,
