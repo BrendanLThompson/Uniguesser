@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { Component } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
@@ -19,12 +20,30 @@ const Item = ({ uni }) => {
   );
 };
 
+const Itest = [
+  { src: "./assets/ye.png" },
+  { src: "./assets/yes.png" },
+  { src: "./assets/yup.jpg" },
+  { src: "./assets/Horimiya-OP.webp" },
+];
 const renderItem = ({ item }) => <Item uni={item.uni} />;
-
 class App extends React.Component {
+  // const [hints,setHints] = useState([])
+
+  images = () => {
+    const random = [...Itest]
+      .sort(() => Math.random() - 0.5)
+      .map((hint) => ({ ...hint, id: Math.random() }));
+
+    setHints(random);
+  };
+
   constructor() {
     super();
-    this.state = { firstModal: false, secondModal: false };
+    this.state = {
+      firstModal: false,
+      secondModal: false,
+    };
   }
 
   render() {
@@ -41,7 +60,11 @@ class App extends React.Component {
               style={styles.image}
             />
           </TouchableOpacity>{" "}
-          <Modal transparent={true} visible={this.state.firstModal}>
+          <Modal
+            transparent={true}
+            visible={this.state.firstModal}
+            style={{ width: 600, height: 600 }}
+          >
             <View
               style={{
                 backgroundColor: "#000000aa",
@@ -70,6 +93,7 @@ class App extends React.Component {
                     style={styles.Mimage}
                   />
                 </TouchableOpacity>
+                <Text style={styles.test}>test test test</Text>
               </View>
             </View>
           </Modal>
@@ -117,9 +141,12 @@ class App extends React.Component {
             </View>
           </Modal>
         </Text>
+
+        <StatusBar style="auto" />
         <View style={styles.container}>
           <View style={styles.SquareShapeView}>
             <Image
+              id="img"
               style={styles.Squareimg}
               source={require("./assets/ye.png")}
             />
@@ -157,7 +184,6 @@ class App extends React.Component {
             keyExtractor={(item) => item.id}
           />
         </View>
-        <StatusBar style="auto" />
       </View>
     );
   }
@@ -178,6 +204,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 3,
     borderBottomColor: "#B2A268",
     color: "#B2A268",
+  },
+  test: {
+    fontSize: 19,
+    marginTop: "10%",
+    marginLeft: "2%",
   },
   container: {
     flexDirection: "row",
