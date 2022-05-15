@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
@@ -8,12 +8,16 @@ import {
   Modal,
   TouchableOpacity,
 } from "react-native";
+import firestoreDB from './composables/useDb.tsx'
+import getUniversity from './types/university.tsx'
 
 class App extends React.Component {
   constructor() {
     super();
+    getUniversity();
     this.state = { firstModal: false, secondModal: false };
   }
+
 
   render() {
     return (
