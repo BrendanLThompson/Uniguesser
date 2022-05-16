@@ -27,4 +27,4 @@ jobs:
         prod: true
         edge: true
         on:
-          branch: main
+          branch: master
