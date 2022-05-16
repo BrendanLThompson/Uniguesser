@@ -29,7 +29,15 @@ const Itest = [
   { src: "./assets/Horimiya-OP.webp" },
 ];
 
+const universityList = ["University of California, Los Angeles", "University of California, Irvine", "California State University, Northridge", "California State University, Long Beach", 
+                        "University of Southern California", "California State Polytechnic University, Pomona", "College of the Canyons", "Pierce College"];
 const renderItem = ({ item }) => <Item uni={item.uni} />;
+
+function randomNum(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
+const answer = universityList[randomNum(0, universityList.length)];
 
 function App() {
   const [hints, setHints] = useState([]);
@@ -69,7 +77,7 @@ function App() {
   };
 
   const searchMascotImage = async (text) => {
-    APICommunicatorController.GetUniversityImages(text+" mascot").then((result) => {
+    APICommunicatorController.GetUniversityImages(text+" logo").then((result) => {
       console.log(result);
       setMascotUrl(result);
     });
@@ -83,9 +91,9 @@ function App() {
   };
 
   useEffect(() => {
-    searchFieldImage("california state university, northridge");
-    searchMascotImage("california state university, northridge");
-    searchLibraryImage("california state university, northridge");    
+    searchFieldImage(answer);
+    searchMascotImage(answer);
+    searchLibraryImage(answer);    
   }, []);
 
   return (
