@@ -31,20 +31,10 @@ const addDataIntoCache = (cacheName, url, response) => {
   }
 };
 
-const Item = ({ uni }) => {
-  return (
-    <View style={styles.card}>
-      <Text style={styles.uni}>{uni}</Text>
-    </View>
-  );
-};
-
 let wrong = 0;
-let wins = 0;
 let correct = 0;
-let plays = 0;
-let score = (wins / plays) * 100;
-let guesses = 0;
+let plays = 1;
+// let score = (correct / plays) * 100;
 let mistake = 0;
 
 const data = [
@@ -57,7 +47,6 @@ const data = [
   { label: "College of the Canyons" },
   { label: "Pierce College" },
 ];
-const renderItem = ({ item }) => <Item uni={item.uni} />;
 
 function randomNum(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
@@ -67,13 +56,16 @@ const answer = data[randomNum(0, data.length)];
 
 const App: FC = () => {
   const [selected, setSelected] = useState(undefined);
-  const [hints, setHints] = useState([]);
-  const [turns, setTurns] = useState(0);
   const [firstModal, setfirstModal] = useState(false);
   const [secondModal, setsecondModal] = useState(false);
-  const [searchValue, setsearchValue] = useState();
   const [disabled, setDisabled] = useState(false);
-  //const [data, setdata] = useState();
+  const [showLibrary, setshowLibrary] = useState(false);
+  const [showLogo, setshowLogo] = useState(false);
+  const [fieldUrl, setFieldUrl] = useState();
+  const [mascotUrl, setMascotUrl] = useState();
+  const [libraryUrl, setLibraryUrl] = useState();
+  const [state, setState] = useState(null);
+  const [guesses, setGuesses] = useState(5);
 
   const data = [
     { label: "University of California, Los Angeles", value: "1" },
@@ -92,21 +84,6 @@ const App: FC = () => {
   const toggleModal2 = () => {
     setsecondModal(!secondModal);
   };
-
-  const images = () => {
-    const random = [...Itest]
-      .sort(() => Math.random() - 0.5)
-      .map((hint) => ({ ...hint, id: Math.random() }));
-
-    setHints(random);
-    setTurns(0);
-  };
-  console.log(hints, turns);
-
-  const [fieldUrl, setFieldUrl] = useState();
-  const [mascotUrl, setMascotUrl] = useState();
-  const [libraryUrl, setLibraryUrl] = useState();
-  const [state, setState] = useState(null);
 
   const searchFieldImage = async (text) => {
     APICommunicatorController.GetUniversityImages(text + " field").then(
@@ -141,12 +118,21 @@ const App: FC = () => {
     searchLibraryImage(answer.label);
   }, []);
 
-  // const handlePress = (selected) => {
-  //   console.log(selected);
-  //   if (selected === answer.label) {
-  //     console.log("yoyoyo");
-  //   }
-  // };
+  const ContentComponent = () => {
+    return (
+      <View>
+        <Image style={styles.Squareimg} source={{ uri: libraryUrl }} />
+      </View>
+    );
+  };
+
+  const ContentComponent1 = () => {
+    return (
+      <View>
+        <Image style={styles.Squareimg} source={{ uri: mascotUrl }} />
+      </View>
+    );
+  };
 
   return (
     <View style={styles.top}>
@@ -218,7 +204,7 @@ const App: FC = () => {
                 />
               </TouchableOpacity>
               <View style={styles.txtContainer}>
-                Guess Ratio: {score}% <br />
+                Guess Ratio: {(correct / (correct + wrong)) * 100}% <br />
                 <br />
                 Correct Guess: {correct} <br /> <br />
                 Incorect Guesses: {wrong} <br /> <br />
@@ -233,11 +219,13 @@ const App: FC = () => {
         <View style={styles.SquareShapeView}>
           <Image id="img" style={styles.Squareimg} source={{ uri: fieldUrl }} />
         </View>
+
         <View style={styles.SquareShapeView}>
-          <Image style={styles.Squareimg} source={{ uri: libraryUrl }} />
+          {showLibrary && <ContentComponent />}
         </View>
+
         <View style={styles.SquareShapeView}>
-          <Image style={styles.Squareimg} source={{ uri: mascotUrl }} />
+          {showLogo && <ContentComponent1 />}
         </View>
       </View>
 
@@ -247,26 +235,33 @@ const App: FC = () => {
           color="#0054A6"
           disabled={disabled}
           onPress={() => {
-            console.log(answer);
-            console.log(selected);
             if (selected.label == null) {
               mistake++;
             }
             if (selected.label == answer.label) {
-              console.log("correct");
               correct++;
               setDisabled(!disabled);
               setsecondModal(!secondModal);
             } else {
               wrong++;
-              console.log("wrong", wrong);
+              setGuesses(5 - wrong);
+              if (wrong == 1) {
+                setshowLibrary(!showLibrary);
+              }
+              if (wrong == 3) {
+                setshowLogo(!showLogo);
+              }
               if (wrong == 5) {
                 setDisabled(!disabled);
-                console.log("fail");
               }
             }
           }}
         ></Button>
+      </View>
+      <View>
+        <Text style={{ color: "#B2A268" }}>
+          You have {guesses} guesses left!
+        </Text>
       </View>
       <View style={styles.RectangleShapeView}>
         <Dropdown
