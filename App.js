@@ -256,6 +256,7 @@ const App: FC = () => {
               console.log("correct");
               correct++;
               setDisabled(!disabled);
+              setsecondModal(!secondModal);
             } else {
               wrong++;
               console.log("wrong", wrong);
