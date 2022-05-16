@@ -22,15 +22,16 @@ const Item = ({ uni }) => {
   );
 };
 
-const Itest = [
-  { src: "./assets/ye.png" },
-  { src: "./assets/yes.png" },
-  { src: "./assets/yup.jpg" },
-  { src: "./assets/Horimiya-OP.webp" },
+const universityList = [
+  { title: "University of California, Los Angeles" },
+  { title: "University of California, Irvine" },
+  { title: "California State University, Northridge" },
+  { title: "California State University, Long Beach" },
+  { title: "University of Southern California" },
+  { title: "California State Polytechnic University, Pomona" },
+  { title: "College of the Canyons" },
+  { title: "Pierce College" },
 ];
-
-const universityList = ["University of California, Los Angeles", "University of California, Irvine", "California State University, Northridge", "California State University, Long Beach", 
-                        "University of Southern California", "California State Polytechnic University, Pomona", "College of the Canyons", "Pierce College"];
 const renderItem = ({ item }) => <Item uni={item.uni} />;
 
 function randomNum(min, max) {
@@ -70,30 +71,36 @@ function App() {
   const [state, setState] = useState(null);
 
   const searchFieldImage = async (text) => {
-    APICommunicatorController.GetUniversityImages(text+" field").then((result) => {
-      console.log(result);
-      setFieldUrl(result);
-    });
+    APICommunicatorController.GetUniversityImages(text + " field").then(
+      (result) => {
+        console.log(result);
+        setFieldUrl(result);
+      }
+    );
   };
 
   const searchMascotImage = async (text) => {
-    APICommunicatorController.GetUniversityImages(text+" logo").then((result) => {
-      console.log(result);
-      setMascotUrl(result);
-    });
+    APICommunicatorController.GetUniversityImages(text + " logo").then(
+      (result) => {
+        console.log(result);
+        setMascotUrl(result);
+      }
+    );
   };
 
   const searchLibraryImage = async (text) => {
-    APICommunicatorController.GetUniversityImages(text+" library").then((result) => {
-      console.log(result);
-      setLibraryUrl(result);
-    });
+    APICommunicatorController.GetUniversityImages(text + " library").then(
+      (result) => {
+        console.log(result);
+        setLibraryUrl(result);
+      }
+    );
   };
 
   useEffect(() => {
-    searchFieldImage(answer);
-    searchMascotImage(answer);
-    searchLibraryImage(answer);    
+    searchFieldImage(answer.title);
+    searchMascotImage(answer.title);
+    searchLibraryImage(answer.title);
   }, []);
 
   return (
@@ -157,69 +164,18 @@ function App() {
 
       <StatusBar style="auto" />
       <View style={styles.container}>
-        <div className="grid">
-          {hints.map((hint) => (
-            <div className="card" key={hint.id}>
-              <div>
-                <img className="front" src={hint.src} />
-                <img
-                  className="back"
-                  src={require("./assets/yess.jpg")}
-                  alt="imgback"
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-
         <View style={styles.SquareShapeView}>
-          <Image
-            id="img"
-            style={styles.Squareimg}
-            source={{ uri: fieldUrl }}
-          />
+          <Image id="img" style={styles.Squareimg} source={{ uri: fieldUrl }} />
         </View>
         <View style={styles.SquareShapeView}>
-          <Image
-            style={styles.Squareimg}
-            source={{ uri: libraryUrl }}
-          />
+          <Image style={styles.Squareimg} source={{ uri: libraryUrl }} />
         </View>
         <View style={styles.SquareShapeView}>
-          <Image
-            style={styles.Squareimg}
-            source={{ uri: mascotUrl }}
-          />
+          <Image style={styles.Squareimg} source={{ uri: mascotUrl }} />
         </View>
-        <View style={styles.SquareShapeView}></View>
-        <View style={styles.SquareShapeView} />
       </View>
 
-      <View style={styles.searchList}>
-        <SearchBar
-          placeholder="Search Here..."
-          lightTheme
-          value={searchValue}
-          containerStyle={{
-            backgroundColor: "#0054A6",
-            borderWidth: 3,
-            borderBottomWidth: 3,
-            borderTopWidth: 3,
-            borderTopColor: "#FFF200",
-            borderBottomColor: "#FFF200",
-            borderColor: "#FFF200",
-          }}
-          onChangeText={(text) => this.searchFunction(text)}
-          autoCorrect={false}
-        />
-        <button onClick={images}>Test</button>
-
-        <FlatList
-          data={data}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-        />
-      </View>
+      <View style={styles.RectangleShapeView} />
     </View>
   );
 }
@@ -254,6 +210,14 @@ const styles = StyleSheet.create({
     marginTop: "10%",
     marginRight: "3.75%",
     marginLeft: "-2%",
+    backgroundColor: "#0054A6",
+    borderWidth: 3,
+    borderColor: "#FFF200",
+  },
+  RectangleShapeView: {
+    marginTop: "15%",
+    width: 600,
+    height: 60,
     backgroundColor: "#0054A6",
     borderWidth: 3,
     borderColor: "#FFF200",
