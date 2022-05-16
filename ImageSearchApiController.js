@@ -1,54 +1,27 @@
-import React, { Component } from 'react'
-import fetch from 'node-fetch';
+import React from 'react'
 
-type Results = {
-  value: string;
-};
+export default class APICommunicatorController {
+  static GetUniversityImages = (searchParam) => { 
+      return new Promise((resolve, reject) => {
+          //fetch('http://192.168.4.66:25565/GetBookDetail',
+          //fetch(('https://api.bing.microsoft.com/v7.0/images/search?q='+searchParam),
+          fetch(('https://api.bing.microsoft.com/v7.0/images/search?q='+searchParam),
 
-type GetResultsResponse = {
-  data: Results[];
-};
+          {
+              method: 'GET',
+              headers: 
+              {
+                'Ocp-Apim-Subscription-Key' : '1793175579da405a88f9a56aed223862'
+              }
+          }
+          ).then((response) => response.json())
+          .then((json) => {   
+              //console.log(json.value); 
+              console.log(json.value[0].contentUrl);     
 
-async function GetUniversityImages(searchParam) {
-  try {
-    // 👇️ const response: Response
-    const response = await fetch(('https://bing-image-search1.p.rapidapi.com/images/search?q='+searchParam), {
-      method: 'GET',
-      headers: {
-        'X-RapidAPI-Key' : '5b4a0ba84amsh75dac027222b54fp15ba82jsnefe3c60442cd'
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error! status: ${response.status}`);
-    }
-
-    // 👇️ const result: GetResultsResponse
-    let result = await response.json();
-    result = result.value[0].webSearchUrl;
-
-    //console.log('result is: ', result);
-    //console.log('result is: ', JSON.stringify(result, null, 4));
-
-    return result;
-  } catch (error) {
-    if (error instanceof Error) {
-      console.log('error message: ', error.message);
-      return error.message;
-    } else {
-      console.log('unexpected error: ', error);
-      return 'An unexpected error occurred';
+              resolve(json.value[0].contentUrl);
+              //resolve(json); 
+          })
+      })
     }
   }
-}
-
-/* function SetUniversityImages(searchParam) {
-   GetUniversityImages(searchParam).then(
-      (result) =>
-      {
-         console.log("result: ", result)
-         return (data);
-      })  
-   
-} */
-export default GetUniversityImages;

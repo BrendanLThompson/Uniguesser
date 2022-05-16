@@ -1,4 +1,4 @@
-import React, { useState, setState } from "react";
+import React, { useState, setState, useEffect } from "react";
 import { Component } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { SearchBar } from "react-native-elements";
 import GetUniversityImages from "./ImageSearchApiController.js";
+import APICommunicatorController from "./ImageSearchApiController.js";
 
 const Item = ({ uni }) => {
   return (
@@ -54,6 +55,39 @@ function App() {
     setTurns(0);
   };
   console.log(hints, turns);
+
+  const [fieldUrl, setFieldUrl] = useState();
+  const [mascotUrl, setMascotUrl] = useState();
+  const [libraryUrl, setLibraryUrl] = useState();
+  const [state, setState] = useState(null);
+
+  const searchFieldImage = async (text) => {
+    APICommunicatorController.GetUniversityImages(text+" field").then((result) => {
+      console.log(result);
+      setFieldUrl(result);
+    });
+  };
+
+  const searchMascotImage = async (text) => {
+    APICommunicatorController.GetUniversityImages(text+" mascot").then((result) => {
+      console.log(result);
+      setMascotUrl(result);
+    });
+  };
+
+  const searchLibraryImage = async (text) => {
+    APICommunicatorController.GetUniversityImages(text+" library").then((result) => {
+      console.log(result);
+      setLibraryUrl(result);
+    });
+  };
+
+  useEffect(() => {
+    searchFieldImage("california state university, northridge");
+    searchMascotImage("california state university, northridge");
+    searchLibraryImage("california state university, northridge");    
+  }, []);
+
   return (
     <View style={styles.top}>
       <Text style={styles.header}>
@@ -134,13 +168,19 @@ function App() {
           <Image
             id="img"
             style={styles.Squareimg}
-            source={require("./assets/ye.png")}
+            source={{ uri: fieldUrl }}
           />
         </View>
         <View style={styles.SquareShapeView}>
           <Image
             style={styles.Squareimg}
-            source={require("./assets/yes.png")}
+            source={{ uri: libraryUrl }}
+          />
+        </View>
+        <View style={styles.SquareShapeView}>
+          <Image
+            style={styles.Squareimg}
+            source={{ uri: mascotUrl }}
           />
         </View>
         <View style={styles.SquareShapeView}></View>
