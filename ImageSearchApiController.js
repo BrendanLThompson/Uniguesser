@@ -11,7 +11,7 @@ export default class APICommunicatorController {
               method: 'GET',
               headers: 
               {
-                'Ocp-Apim-Subscription-Key' : '1793175579da405a88f9a56aed223862'
+                'Ocp-Apim-Subscription-Key' : '6f14715c119740a0b0a25454c281534a'
               }
           }
           ).then((response) => response.json())
