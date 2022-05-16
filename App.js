@@ -1,4 +1,4 @@
-import React, { useState, setState, useEffect } from "react";
+import React, { useState, setState, useEffect, FC } from "react";
 import { Component } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
@@ -13,6 +13,7 @@ import {
 import { SearchBar } from "react-native-elements";
 import GetUniversityImages from "./ImageSearchApiController.js";
 import APICommunicatorController from "./ImageSearchApiController.js";
+import Dropdown from './components/Dropdown';
 
 const Item = ({ uni }) => {
   return (
@@ -22,15 +23,15 @@ const Item = ({ uni }) => {
   );
 };
 
-const universityList = [
-  { title: "University of California, Los Angeles" },
-  { title: "University of California, Irvine" },
-  { title: "California State University, Northridge" },
-  { title: "California State University, Long Beach" },
-  { title: "University of Southern California" },
-  { title: "California State Polytechnic University, Pomona" },
-  { title: "College of the Canyons" },
-  { title: "Pierce College" },
+const data = [
+  { label: "University of California, Los Angeles" },
+  { label: "University of California, Irvine" },
+  { label: "California State University, Northridge" },
+  { label: "California State University, Long Beach" },
+  { label: "University of Southern California" },
+  { label: "California State Polytechnic University, Pomona" },
+  { label: "College of the Canyons" },
+  { label: "Pierce College" },
 ];
 const renderItem = ({ item }) => <Item uni={item.uni} />;
 
@@ -38,15 +39,27 @@ function randomNum(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-const answer = universityList[randomNum(0, universityList.length)];
+const answer = data[randomNum(0, data.length)];
 
-function App() {
+const App: FC = () =>{
+  const [selected, setSelected] = useState(undefined);
   const [hints, setHints] = useState([]);
   const [turns, setTurns] = useState(0);
   const [firstModal, setfirstModal] = useState(false);
   const [secondModal, setsecondModal] = useState(false);
   const [searchValue, setsearchValue] = useState();
-  const [data, setdata] = useState();
+  //const [data, setdata] = useState();
+  
+  const data = [
+    { label: "University of California, Los Angeles", value: '1' },
+    { label: "University of California, Irvine", value: '2' },
+    { label: "California State University, Northridge", value: '3' },
+    { label: "California State University, Long Beach", value: '4' },
+    { label: "University of Southern California", value: '5' },
+    { label: "California State Polytechnic University, Pomona", value: '6' },
+    { label: "College of the Canyons", value: '7' },
+    { label: "Pierce College", value: '8' },
+  ];
 
   const toggleModal = () => {
     setfirstModal(!firstModal);
@@ -98,9 +111,9 @@ function App() {
   };
 
   useEffect(() => {
-    searchFieldImage(answer.title);
-    searchMascotImage(answer.title);
-    searchLibraryImage(answer.title);
+    searchFieldImage(answer.label);
+    searchMascotImage(answer.label);
+    searchLibraryImage(answer.label);
   }, []);
 
   return (
@@ -175,7 +188,9 @@ function App() {
         </View>
       </View>
 
-      <View style={styles.RectangleShapeView} />
+      <View style={styles.RectangleShapeView}>
+        <Dropdown label="Select Item" data={data} onSelect={setSelected} />
+      </View>
     </View>
   );
 }
