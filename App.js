@@ -9,11 +9,27 @@ import {
   Modal,
   TouchableOpacity,
   FlatList,
+  ScrollView,
+  Button,
 } from "react-native";
 import { SearchBar } from "react-native-elements";
 import GetUniversityImages from "./ImageSearchApiController.js";
 import APICommunicatorController from "./ImageSearchApiController.js";
-import Dropdown from './components/Dropdown';
+import Dropdown from "./components/Dropdown";
+
+// Function to add our give data into cache
+const addDataIntoCache = (cacheName, url, response) => {
+  // Converting our response into Actual Response form
+  const data = new Response(JSON.stringify(response));
+
+  if ("caches" in window) {
+    // Opening given cache and putting our data into it
+    caches.open(cacheName).then((cache) => {
+      cache.put(url, data);
+      alert("Data Added into cache!");
+    });
+  }
+};
 
 const Item = ({ uni }) => {
   return (
@@ -22,6 +38,14 @@ const Item = ({ uni }) => {
     </View>
   );
 };
+
+let wrong = 0;
+let wins = 0;
+let correct = 0;
+let plays = 0;
+let score = (wins / plays) * 100;
+let guesses = 0;
+let mistake = 0;
 
 const data = [
   { label: "University of California, Los Angeles" },
@@ -41,24 +65,25 @@ function randomNum(min, max) {
 
 const answer = data[randomNum(0, data.length)];
 
-const App: FC = () =>{
+const App: FC = () => {
   const [selected, setSelected] = useState(undefined);
   const [hints, setHints] = useState([]);
   const [turns, setTurns] = useState(0);
   const [firstModal, setfirstModal] = useState(false);
   const [secondModal, setsecondModal] = useState(false);
   const [searchValue, setsearchValue] = useState();
+  const [disabled, setDisabled] = useState(false);
   //const [data, setdata] = useState();
-  
+
   const data = [
-    { label: "University of California, Los Angeles", value: '1' },
-    { label: "University of California, Irvine", value: '2' },
-    { label: "California State University, Northridge", value: '3' },
-    { label: "California State University, Long Beach", value: '4' },
-    { label: "University of Southern California", value: '5' },
-    { label: "California State Polytechnic University, Pomona", value: '6' },
-    { label: "College of the Canyons", value: '7' },
-    { label: "Pierce College", value: '8' },
+    { label: "University of California, Los Angeles", value: "1" },
+    { label: "University of California, Irvine", value: "2" },
+    { label: "California State University, Northridge", value: "3" },
+    { label: "California State University, Long Beach", value: "4" },
+    { label: "University of Southern California", value: "5" },
+    { label: "California State Polytechnic University, Pomona", value: "6" },
+    { label: "College of the Canyons", value: "7" },
+    { label: "Pierce College", value: "8" },
   ];
 
   const toggleModal = () => {
@@ -116,6 +141,13 @@ const App: FC = () =>{
     searchLibraryImage(answer.label);
   }, []);
 
+  // const handlePress = (selected) => {
+  //   console.log(selected);
+  //   if (selected === answer.label) {
+  //     console.log("yoyoyo");
+  //   }
+  // };
+
   return (
     <View style={styles.top}>
       <Text style={styles.header}>
@@ -144,7 +176,22 @@ const App: FC = () =>{
                   style={styles.Mimage}
                 />
               </TouchableOpacity>
-              <Text style={styles.test}>test test test</Text>
+              <View style={styles.txtContainer2}>
+                {" "}
+                Uni-Guessr! is a game that gives
+                <br />
+                you 5 tries to guess a university
+                <br />
+                from the pictures presented.
+                <br />
+                Simply select your guess in the
+                <br />
+                drop down menu below and click
+                <br />
+                the button. If your guess is
+                <br />
+                correct you win, if not, try again!
+              </View>
             </View>
           </View>
         </Modal>
@@ -170,6 +217,12 @@ const App: FC = () =>{
                   style={styles.Mimage}
                 />
               </TouchableOpacity>
+              <View style={styles.txtContainer}>
+                Guess Ratio: {score}% <br />
+                <br />
+                Correct Guess: {correct} <br /> <br />
+                Incorect Guesses: {wrong} <br /> <br />
+              </View>
             </View>
           </View>
         </Modal>
@@ -188,12 +241,43 @@ const App: FC = () =>{
         </View>
       </View>
 
+      <View style={styles.buttonView}>
+        <Button
+          title="Submit"
+          color="#0054A6"
+          disabled={disabled}
+          onPress={() => {
+            console.log(answer);
+            console.log(selected);
+            if (selected.label == null) {
+              mistake++;
+            }
+            if (selected.label == answer.label) {
+              console.log("correct");
+              correct++;
+              setDisabled(!disabled);
+            } else {
+              wrong++;
+              console.log("wrong", wrong);
+              if (wrong == 5) {
+                setDisabled(!disabled);
+                console.log("fail");
+              }
+            }
+          }}
+        ></Button>
+      </View>
       <View style={styles.RectangleShapeView}>
-        <Dropdown label="Select Item" data={data} onSelect={setSelected} />
+        <Dropdown
+          label="Select Item"
+          data={data}
+          onSelect={setSelected}
+          style={{ width: 600 }}
+        />
       </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   top: {
@@ -222,7 +306,7 @@ const styles = StyleSheet.create({
   SquareShapeView: {
     width: 300,
     height: 300,
-    marginTop: "10%",
+    marginTop: "5%",
     marginRight: "3.75%",
     marginLeft: "-2%",
     backgroundColor: "#0054A6",
@@ -230,12 +314,20 @@ const styles = StyleSheet.create({
     borderColor: "#FFF200",
   },
   RectangleShapeView: {
-    marginTop: "15%",
+    marginTop: "1%",
     width: 600,
-    height: 60,
+    height: 56,
     backgroundColor: "#0054A6",
     borderWidth: 3,
     borderColor: "#FFF200",
+  },
+  buttonView: {
+    marginTop: "2%",
+    width: 300,
+    backgroundColor: "#0054A6",
+    borderWidth: 3,
+    borderColor: "#FFF200",
+    color: "#FFF200",
   },
   modal: {
     marginTop: "5%",
@@ -278,6 +370,22 @@ const styles = StyleSheet.create({
     width: 600,
     height: 60,
     marginRight: "-1%",
+  },
+  txtContainer: {
+    color: "#B2A268",
+    flexDirection: "row",
+    fontSize: 40,
+    marginTop: "22%",
+    justifyContent: "center",
+    textAlign: "center",
+  },
+  txtContainer2: {
+    color: "#B2A268",
+    flexDirection: "row",
+    fontSize: 35,
+    marginTop: "15%",
+    justifyContent: "center",
+    textAlign: "center",
   },
 });
 

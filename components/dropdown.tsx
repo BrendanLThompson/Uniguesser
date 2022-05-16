@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useRef, useState } from 'react';
+import React, { FC, ReactElement, useRef, useState } from "react";
 import {
   FlatList,
   StyleSheet,
@@ -6,8 +6,8 @@ import {
   TouchableOpacity,
   Modal,
   View,
-} from 'react-native';
-import { Icon } from 'react-native-elements';
+} from "react-native";
+import { Icon } from "react-native-elements";
 
 interface Props {
   label: string;
@@ -26,9 +26,18 @@ const Dropdown: FC<Props> = ({ label, data, onSelect }) => {
   };
 
   const openDropdown = (): void => {
-    DropdownButton.current.measure((_fx: number, _fy: number, _w: number, h: number, _px: number, py: number) => {
-      setDropdownTop(py + h);
-    });
+    DropdownButton.current.measure(
+      (
+        _fx: number,
+        _fy: number,
+        _w: number,
+        h: number,
+        _px: number,
+        py: number
+      ) => {
+        setDropdownTop(py + h);
+      }
+    );
     setVisible(true);
   };
 
@@ -80,31 +89,29 @@ const Dropdown: FC<Props> = ({ label, data, onSelect }) => {
 
 const styles = StyleSheet.create({
   button: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#efefef',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#efefef",
     height: 50,
     zIndex: 1,
   },
   buttonText: {
     flex: 1,
-    textAlign: 'center',
+    textAlign: "center",
   },
   icon: {
     marginRight: 10,
   },
   dropdown: {
-    position: 'absolute',
-    backgroundColor: '#fff',
-    width: '100%',
-    shadowColor: '#000000',
-    shadowRadius: 4,
-    shadowOffset: { height: 4, width: 0 },
-    shadowOpacity: 0.5,
+    position: "center",
+    marginLeft: "25%",
+    marginTop: "1%",
+    backgroundColor: "#fff",
+    width: "50%",
   },
   overlay: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
   },
   item: {
     paddingHorizontal: 10,
