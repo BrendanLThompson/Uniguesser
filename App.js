@@ -11,6 +11,7 @@ import {
   FlatList,
 } from "react-native";
 import { SearchBar } from "react-native-elements";
+import GetUniversityImages from "./ImageSearchApiController.js";
 
 const Item = ({ uni }) => {
   return (
